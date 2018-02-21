@@ -63,8 +63,9 @@ class BackupFactory implements BackupFactoryInterface {
 		$database = null
 	) {
 		$backupProcessInstance = new BackupProcess(new Process(''));
+		$database = $database?: $options['connections'][$options['default']]['driver'];
 
-		switch ($database ? $database : $options['default'])
+		switch ($database)
 		{
 			case 'mysql':
 				return new BackupEngineMysql(

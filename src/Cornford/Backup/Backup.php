@@ -36,7 +36,6 @@ class Backup extends BackupAbstract {
 
 		$filepath = $path . '/' . $filename . '.' . $this->getBackupEngineInstance()->getFileExtension();
 
-        $this->setWorkingFilepath($filepath);
 		$result = $this->getBackupEngineInstance()->export($filepath);
 
 		if ($result) {
@@ -208,15 +207,9 @@ class Backup extends BackupAbstract {
 
 		try {
 			foreach (new DirectoryIterator($path) as $fileinfo) {
-				if ($fileinfo->isDot() ||
-					!$fileinfo->isFile() ||
-					in_array($fileinfo->getFilename(), BackupFilesystem::$ignoredFiles) ||
-					substr($fileinfo->getFilename(), 0, 1) == '.'
-				) {
-					continue;
+				if (!$fileinfo->isDot() && $fileinfo->isFile()) {
+					$results[] = $fileinfo->getPathname();
 				}
-
-				$results[] = $fileinfo->getPathname();
 			}
 		} catch (Exception $exception) {
 			// Exception thrown continue and return empty result set

@@ -46,8 +46,9 @@ class BackupEngineSqlite extends BackupEngineAbstract {
 	 */
 	public function export($filepath)
 	{
-		$command = sprintf('%s %s %s',
+		$command = sprintf('%s%s %s %s',
 			$this->getExportCommand(),
+			self::ENGINE_EXPORT_PROCESS,
 			escapeshellarg($this->getDatabase()),
 			escapeshellarg($filepath)
 		);
@@ -64,8 +65,9 @@ class BackupEngineSqlite extends BackupEngineAbstract {
 	 */
 	public function restore($filepath)
 	{
-		$command = sprintf('%s -f %s %s',
+		$command = sprintf('%s%s -f %s %s',
 			$this->getRestoreCommand(),
+			self::ENGINE_RESTORE_PROCESS,
 			escapeshellarg($filepath),
 			escapeshellarg($this->getDatabase())
 		);

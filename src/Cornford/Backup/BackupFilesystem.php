@@ -10,16 +10,6 @@ class BackupFilesystem implements BackupFilesystemInterface {
 	const OS_OSX = 4;
 
 	/**
-	 * Ignored files.
-	 *
-	 * @var array
-	 */
-	public static $ignoredFiles = [
-		'.gitignore',
-		'.gitkeep'
-	];
-
-	/**
 	 * Check path exists.
 	 *
 	 * @param string $path
@@ -76,7 +66,7 @@ class BackupFilesystem implements BackupFilesystemInterface {
 	*/
 	public function removeFile($filepath)
 	{
-		@unlink($filepath);
+		unlink($filepath);
 	}
 
 	/**
@@ -140,9 +130,9 @@ class BackupFilesystem implements BackupFilesystemInterface {
 		switch ($this->getOperatingSystem()) {
 			case self::OS_OSX:
 			case self::OS_LINUX:
-				exec(sprintf('/usr/bin/which %s', $command), $result, $returnCode);
+				exec(sprintf('which %s', $command), $result, $returnCode);
 				if (isset($result[0])) {
-					$result = $result[0];
+					$result = substr($result[0], 0, strrpos($result[0], '/') + 1);
 				}
 				break;
 			case self::OS_WIN:

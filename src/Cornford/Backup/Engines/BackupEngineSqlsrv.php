@@ -47,8 +47,9 @@ class BackupEngineSqlsrv extends BackupEngineAbstract {
 	public function export($filepath)
 	{
 		$command = sprintf(
-			'%s -E -S %s –Q "BACKUP DATABASE %s TO DISK=\'%s\'"',
+			'%s%s -E -S %s –Q "BACKUP DATABASE %s TO DISK=\'%s\'"',
 			$this->getExportCommand(),
+			self::ENGINE_RESTORE_PROCESS,
 			escapeshellarg($this->getHostname()),
 			escapeshellarg($this->getDatabase()),
 			escapeshellarg($filepath)
@@ -66,8 +67,9 @@ class BackupEngineSqlsrv extends BackupEngineAbstract {
 	 */
 	public function restore($filepath)
 	{
-		$command = sprintf('%s -E -S %s –Q "RESTORE DATABASE %s FROM DISK=\'%s\'"',
+		$command = sprintf('%s%s -E -S %s –Q "RESTORE DATABASE %s FROM DISK=\'%s\'"',
 			$this->getRestoreCommand(),
+			self::ENGINE_RESTORE_PROCESS,
 			escapeshellarg($this->getHostname()),
 			escapeshellarg($this->getDatabase()),
 			escapeshellarg($filepath)

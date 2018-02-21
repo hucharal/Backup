@@ -109,13 +109,13 @@ abstract class BackupAbstract implements BackupInterface {
 		$exportCommand = $this->backupFilesystemInstance->locateCommand(self::$backupEngineInstance->getExportProcess());
 
 		if (!$exportCommand) {
-			$exportCommand = isset($options['processors'][$this->getBackupEngineName()]['export']) ? $options['processors'][$this->getBackupEngineName()]['export'] . $this->getBackupEngineInstance()->getExportProcess() : null;
+			$exportCommand = isset($options['processors'][$this->getBackupEngineName()]['export']) ? $options['processors'][$this->getBackupEngineName()]['export'] : null;
 		}
 
 		$restoreCommand = $this->backupFilesystemInstance->locateCommand(self::$backupEngineInstance->getRestoreProcess());
 
 		if (!$restoreCommand) {
-			$restoreCommand = isset($options['processors'][$this->getBackupEngineName()]['restore']) ? $options['processors'][$this->getBackupEngineName()]['restore'] . $this->getBackupEngineInstance()->getRestoreProcess() : null;
+			$restoreCommand = isset($options['processors'][$this->getBackupEngineName()]['restore']) ? $options['processors'][$this->getBackupEngineName()]['restore'] : null;
 		}
 
 		self::$backupEngineInstance->setExportCommand($exportCommand);
@@ -241,9 +241,9 @@ abstract class BackupAbstract implements BackupInterface {
 	 */
 	public function getPath()
 	{
-		$path = getcwd() . DIRECTORY_SEPARATOR . $this->path;
+		$path = getcwd() . '/' . $this->path;
 
-		if (substr($this->path, 0, 1) == '/' || substr($this->path, 1, 1) == ':') {
+		if (substr($this->path, 0, 1) == '/') {
 			$path = $this->path;
 		}
 

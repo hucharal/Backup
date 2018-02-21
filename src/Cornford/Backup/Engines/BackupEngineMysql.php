@@ -47,8 +47,9 @@ class BackupEngineMysql extends BackupEngineAbstract {
 	public function export($filepath)
 	{
 		$command = sprintf(
-			'%s --user=%s --password=%s --host=%s --port=%s %s > %s',
+			'%s%s --user=%s --password=%s --host=%s --port=%s %s > %s',
 			$this->getExportCommand(),
+			self::ENGINE_EXPORT_PROCESS,
 			escapeshellarg($this->getUsername()),
 			escapeshellarg($this->getPassword()),
 			escapeshellarg($this->getHostname()),
@@ -70,8 +71,9 @@ class BackupEngineMysql extends BackupEngineAbstract {
 	public function restore($filepath)
 	{
 		$command = sprintf(
-			'%s --user=%s --password=%s --host=%s --port=%s %s < %s',
+			'%s%s --user=%s --password=%s --host=%s --port=%s %s < %s',
 			$this->getRestoreCommand(),
+			self::ENGINE_RESTORE_PROCESS,
 			escapeshellarg($this->getUsername()),
 			escapeshellarg($this->getPassword()),
 			escapeshellarg($this->getHostname()),

@@ -22,8 +22,7 @@ class BackupServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$configPath = __DIR__ . '/../../../config/config.php';
-		$this->publishes([$configPath => config_path('backup.php')], 'backup');
+		$this->package('cornford/backup', null, __DIR__ . '/../../../');
 	}
 
 	/**
@@ -33,34 +32,22 @@ class BackupServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$configPath = __DIR__ . '/../../../config/config.php';
-		$this->mergeConfigFrom($configPath, 'backup');
-
-        $this->app->singleton(
-            'backup',
-            function($app)
+		$this->app['backup'] = $this->app->share(function($app)
 			{
-				$config = array_merge($app['config']->get('database'), $app['config']->get('backup'));
+				$config = array_merge($app['config']->get('database'), $app['config']->get('backup::config'));
 
 				return (new BackupFactory)->build($config);
-			}
-        );
+			});
 
-        $this->app->singleton(
-            'db.export',
-            function($app)
+		$this->app['db.export'] = $this->app->share(function($app)
 			{
 				return new BackupCommandExport(new BackupFactory, $app['config']);
-			}
-        );
+			});
 
-        $this->app->singleton(
-            'db.restore',
-            function($app)
+		$this->app['db.restore'] = $this->app->share(function($app)
 			{
 				return new BackupCommandRestore(new BackupFactory, $app['config']);
-			}
-        );
+			});
 
 		$this->commands(
 			'db.export',
